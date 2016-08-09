@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Telephony;
 import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
 import java.util.ArrayList;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -112,7 +113,10 @@ public class Sms extends CordovaPlugin {
 
 	private boolean checkSupport() {
 		Activity ctx = this.cordova.getActivity();
-		return ctx.getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY);
+		TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
+		// this doesn't seem to work using the emulator
+		// return ctx.getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY);
+		return (tm != null) && tm.isSmsCapable();
 	}
 
 	@SuppressLint("NewApi")
